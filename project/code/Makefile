@@ -9,7 +9,7 @@ INCDIR      := includes
 
 CC          := gcc
 CFLAGS      := -Wall -Wextra -Werror -g
-INCFLAGS    := -I$(INCDIR) -I$(LIBFT_DIR)
+INCFLAGS    := -I$(INCDIR)
 RM          := rm -rf
 MAKEFLAGS   := --no-print-directory
 SRC         := $(shell find $(SRCDIR) -name '*.c')
