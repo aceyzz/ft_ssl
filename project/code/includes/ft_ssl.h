@@ -9,5 +9,9 @@
 
 // custom
 # include "colors.h"
+# include "libft.h"
+
+// exit.c
+void	exit_msg(int fd, char *message, int exit_code);
 
 #endif
