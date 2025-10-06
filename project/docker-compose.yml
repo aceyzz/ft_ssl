@@ -1,0 +1,15 @@
+networks:
+  ft_ssl-net:
+    driver: bridge
+
+services:
+  ft_ssl:
+    build: ./vm-ssl
+    container_name: ft_ssl
+    hostname: ft_ssl
+    networks:
+      - ft_ssl-net
+    volumes:
+      - ./code:/work
+    working_dir: /work
+    command: ["sleep", "infinity"]
