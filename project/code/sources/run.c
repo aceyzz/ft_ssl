@@ -1,23 +1,25 @@
 #include "ft_ssl.h"
 
-int	ensure_task_data(t_task *t)
+int ensure_task_data(t_task *t)
 {
-	if (t->data && t->len)
-		return (0);
 	if (t->kind == IN_FILE && t->label)
 	{
-		uint8_t *buf = NULL; size_t n = 0;
-		if (io_read_file(t->label, &buf, &n) != 0)
+		int fd = open(t->label, O_RDONLY);
+		if (fd < 0)
 			return (-1);
-		t->data = buf; t->len = n;
+		close(fd);
 		return (0);
 	}
-	if ((t->kind == IN_STDIN || t->kind == IN_STRING) && (!t->data || !t->len))
-		return (-1);
+	if ((t->kind == IN_STDIN || t->kind == IN_STRING))
+	{
+		if (!t->data || !t->len)
+			return (-1);
+		return (0);
+	}
 	return (0);
 }
 
-int	run_tasks(t_algo algo, t_flags flags, t_task *tasks)
+int run_tasks(t_algo algo, t_flags flags, t_task *tasks)
 {
 	t_task *t = tasks;
 

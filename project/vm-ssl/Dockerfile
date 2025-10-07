@@ -5,6 +5,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	make \
 	vim \
 	valgrind \
+	openssl \
+	curl \
+	ca-certificates \
+	git \
 	&& apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

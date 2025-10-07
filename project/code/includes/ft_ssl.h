@@ -11,8 +11,6 @@
 # include "colors.h"
 # include "libft.h"
 # include "io.h"
-// # include "md5.h"
-// # include "sha256.h"
 
 typedef enum e_algo { ALG_MD5, ALG_SHA256 } t_algo;
 typedef enum e_ikind { IN_STDIN, IN_STRING, IN_FILE } t_ikind;
@@ -27,12 +25,13 @@ typedef struct s_task
 	char			*label;
 	uint8_t			*data;
 	size_t			len;
+	int				from_p;
 	struct s_task	*next;
 }	t_task;
 
 void	parse_cli(int argc, char **argv, t_algo *algo, t_flags *flags, t_task **tasks);
 int		run_tasks(t_algo algo, t_flags flags, t_task *tasks);
-void	task_push_back(t_task **head, t_ikind kind, const char *label, const uint8_t *data, size_t len);
+void	task_push_back(t_task **head, t_ikind kind, const char *label, const uint8_t *data, size_t len, int from_p);
 void	task_clear(t_task **head);
 void	hash_and_print(t_algo algo, t_flags flags, t_task *t);
 int		ensure_task_data(t_task *t);
