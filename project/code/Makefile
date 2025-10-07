@@ -55,7 +55,7 @@ fclean: clean
 
 re: fclean all
 
-# leaks: all
-# 	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
+test-leaks: all
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) md5 -s "salut"
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re test-leaks

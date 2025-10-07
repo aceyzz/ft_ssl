@@ -2,16 +2,21 @@
 
 int main(int argc, char **argv)
 {
-	(void)argv;
+	t_algo	algo;
+	t_flags	flags;
+	t_task	*tasks;
 
 	if (argc < 2)
-		exit_msg(STDERR_FILENO, "usage: ft_ssl command [command opts] [command args]", EXIT_FAILURE);
+		die_err("usage: ft_ssl command [command opts] [command args]", EXIT_FAILURE);
 
-	// Check et init des datas
-	// Selon prog, appel de la fonction de hash
-	// formatage et affichage du resultat
-	// clean exit
-
-	exit_msg(STDOUT_FILENO, "Tout bon brother", EXIT_SUCCESS);
+	tasks = NULL;
+	parse_cli(argc, argv, &algo, &flags, &tasks);
+	if (run_tasks(algo, flags, tasks) != 0)
+	{
+		task_clear(&tasks);
+		exit(EXIT_FAILURE);
+	}
+	task_clear(&tasks);
+	// die_ok("Tout bon brother");
 	return (0);
 }
