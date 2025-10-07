@@ -17,7 +17,7 @@ static void	parse_short_flags(const char *arg, int *i, int argc, char **argv,
 		if (arg[k] == 'p')
 		{
 			f->p = 1;
-			if (!*stdin_cache && read_all_stdin(stdin_cache, stdin_len) != 0)
+			if (!*stdin_cache && io_read_stdin(stdin_cache, stdin_len) != 0)
 				exit(EXIT_FAILURE);
 			task_push_back(tasks, IN_STDIN, NULL, *stdin_cache, *stdin_len);
 			k++;
@@ -34,8 +34,7 @@ static void	parse_short_flags(const char *arg, int *i, int argc, char **argv,
 				task_push_back(tasks, IN_STRING, s, (const uint8_t *)s, ft_strlen(s));
 				return ;
 			}
-			if (*i + 1 >= argc)
-				die_err("ft_ssl: option requires an argument -- s", EXIT_FAILURE);
+			if (*i + 1 >= argc) die_err("ft_ssl: option requires an argument -- s", EXIT_FAILURE);
 			*i += 1;
 			task_push_back(tasks, IN_STRING, argv[*i], (const uint8_t *)argv[*i], ft_strlen(argv[*i]));
 			return ;
@@ -74,8 +73,7 @@ void	parse_cli(int argc, char **argv, t_algo *algo, t_flags *flags, t_task **tas
 	}
 	if (*tasks == NULL)
 	{
-		if (!stdin_cache && read_all_stdin(&stdin_cache, &stdin_len) != 0)
-			exit(EXIT_FAILURE);
+		if (!stdin_cache && io_read_stdin(&stdin_cache, &stdin_len) != 0) exit(EXIT_FAILURE);
 		task_push_back(tasks, IN_STDIN, NULL, stdin_cache, stdin_len);
 	}
 	if (stdin_cache) free(stdin_cache);

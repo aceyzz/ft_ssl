@@ -6,8 +6,7 @@ void	task_push_back(t_task **head, t_ikind kind, const char *label, const uint8_
 	t_task	*it;
 
 	n = (t_task *)malloc(sizeof(t_task));
-	if (!n)
-		exit(EXIT_FAILURE);
+	if (!n) exit(EXIT_FAILURE);
 	n->kind = kind;
 	n->label = label ? ft_strdup(label) : NULL;
 	if (data && len > 0)
@@ -28,23 +27,17 @@ void	task_push_back(t_task **head, t_ikind kind, const char *label, const uint8_
 		n->len = 0;
 	}
 	n->next = NULL;
-	if (!*head)
-	{
-		*head = n;
-		return ;
-	}
+	if (!*head) { *head = n; return ; }
 	it = *head;
-	while (it->next)
-		it = it->next;
+	while (it->next) it = it->next;
 	it->next = n;
 }
 
 void	task_clear(t_task **head)
 {
-	t_task	*it;
+	t_task	*it = *head;
 	t_task	*nx;
 
-	it = *head;
 	while (it)
 	{
 		nx = it->next;

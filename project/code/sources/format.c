@@ -35,7 +35,7 @@ static void	print_hash_line(t_algo algo, t_flags f, t_task *t, char *hex)
 {
 	char	*name;
 
-	name = (algo == ALG_MD5) ? "MD5" : "SHA256";
+	name = (algo == ALG_MD5) ? (char *)"MD5" : (char *)"SHA256";
 	if (f.q)
 	{
 		ft_putstr_fd(hex, STDOUT_FILENO);
@@ -68,7 +68,17 @@ static void	print_hash_line(t_algo algo, t_flags f, t_task *t, char *hex)
 
 void	hash_and_print(t_algo algo, t_flags flags, t_task *t)
 {
+	const t_algo_api *api = algo_api(algo);
+	char *hex;
+
 	if (t->kind == IN_STDIN && flags.p && t->data && t->len)
 		write(STDOUT_FILENO, t->data, t->len);
-	print_hash_line(algo, flags, t, "<pending-hash>");
+	hex = api->hash_hex(t->data, t->len);
+	if (!hex)
+	{
+		log_err(STDERR_FILENO, "ft_ssl: hash failed");
+		return ;
+	}
+	print_hash_line(algo, flags, t, hex);
+	free(hex);
 }

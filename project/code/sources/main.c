@@ -8,7 +8,6 @@ int main(int argc, char **argv)
 
 	if (argc < 2)
 		die_err("usage: ft_ssl command [command opts] [command args]", EXIT_FAILURE);
-
 	tasks = NULL;
 	parse_cli(argc, argv, &algo, &flags, &tasks);
 	if (run_tasks(algo, flags, tasks) != 0)
@@ -17,6 +16,5 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	task_clear(&tasks);
-	// die_ok("Tout bon brother");
 	return (0);
 }
