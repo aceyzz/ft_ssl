@@ -1,5 +1,9 @@
 #include "ft_ssl.h"
 
+// merci https://fr.wikipedia.org/wiki/SHA-2#SHA-256 
+// et https://stackoverflow.com/questions/11937192/sha-256-pseuedocode
+
+// operations de shift et logiques
 static uint32_t ROTR(uint32_t x, uint32_t n) { return (x >> n) | (x << (32 - n)); }
 static uint32_t Ch(uint32_t x, uint32_t y, uint32_t z) { return (x & y) ^ (~x & z); }
 static uint32_t Maj(uint32_t x, uint32_t y, uint32_t z) { return (x & y) ^ (x & z) ^ (y & z); }
@@ -8,6 +12,7 @@ static uint32_t Sig1(uint32_t x) { return ROTR(x, 6) ^ ROTR(x, 11) ^ ROTR(x, 25)
 static uint32_t sig0(uint32_t x) { return ROTR(x, 7) ^ ROTR(x, 18) ^ (x >> 3); }
 static uint32_t sig1(uint32_t x) { return ROTR(x, 17) ^ ROTR(x, 19) ^ (x >> 10); }
 
+// constantes de la table K selon la spec SHA-256
 static const uint32_t K[64] = {
 	0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
 	0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -24,8 +29,10 @@ static const uint32_t K[64] = {
 	0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5,
 	0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
 	0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
-	0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2};
+	0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+};
 
+// compresse un bloc de 64 octets
 static void sha256_compress(t_sha256_ctx *c, const uint8_t block[64])
 {
 	uint32_t w[64];
@@ -60,6 +67,7 @@ static void sha256_compress(t_sha256_ctx *c, const uint8_t block[64])
 	c->h[7] += h;
 }
 
+// start selon spec SHA-256
 void sha256_init(t_sha256_ctx *ctx)
 {
 	ctx->h[0] = 0x6a09e667;
@@ -74,6 +82,7 @@ void sha256_init(t_sha256_ctx *ctx)
 	ctx->buf_len = 0;
 }
 
+// ajoute les donnees au contexte, compresse chaque bloc de 64 octets
 void sha256_update(t_sha256_ctx *ctx, const uint8_t *data, size_t len)
 {
 	ctx->total_len += len;
@@ -94,6 +103,8 @@ void sha256_update(t_sha256_ctx *ctx, const uint8_t *data, size_t len)
 	}
 }
 
+// ajoute padding et length totale en bits, compresse le dernier bloc si necessaire
+// ecrit le hash final dans out (32 octets)
 void sha256_final(t_sha256_ctx *ctx, uint8_t out[32])
 {
 	uint64_t bits = ctx->total_len * 8;

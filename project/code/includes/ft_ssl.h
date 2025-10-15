@@ -1,6 +1,7 @@
 #ifndef FT_SSL_H
 # define FT_SSL_H
 
+// std
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
@@ -8,17 +9,34 @@
 # include <stdint.h>
 # include <errno.h>
 
+// custom
 # include "colors.h"
 # include "libft.h"
 # include "io.h"
 
-typedef enum e_algo { ALG_MD5, ALG_SHA256 } t_algo;
-typedef enum e_ikind { IN_STDIN, IN_STRING, IN_FILE } t_ikind;
+// type d'algo 
+typedef enum e_algo {
+	ALG_MD5,
+	ALG_SHA256
+} t_algo;
+
+// type d'input
+typedef enum e_ikind {
+	IN_STDIN,
+	IN_STRING,
+	IN_FILE
+} t_ikind;
 
 # include "digest.h"
 
-typedef struct s_flags { int p; int q; int r; } t_flags;
+// q = quiet, r = reverse, p = print stdin sur stdout et ajouter le checksum à stdout
+typedef struct s_flags {
+	int p;
+	int q;
+	int r;
+} t_flags;
 
+// 1 task = 1 commande
 typedef struct s_task
 {
 	t_ikind			kind;
@@ -36,11 +54,13 @@ void	task_clear(t_task **head);
 void	hash_and_print(t_algo algo, t_flags flags, t_task *t);
 int		ensure_task_data(t_task *t);
 
+// logs
 void	log_ok(int fd, char *msg);
 void	log_warn(int fd, char *msg);
 void	log_err(int fd, char *msg);
 void	log_err2(int fd, char *m1, char *m2);
 void	log_err3(int fd, char *m1, char *m2, char *m3);
+// exits
 void	die_ok(char *msg);
 void	die_err(char *msg, int code);
 

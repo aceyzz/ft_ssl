@@ -72,9 +72,12 @@ char *sha256_fd_hex(int fd)
 	return (bin_to_hex(digest, 32));
 }
 
+// SI AJOUT ALGO
+// instances statiques de t_algo_api pour chaque algo vers pointeurs de fonctions
 static t_algo_api g_md5 = {"MD5", 32, md5_hex, md5_fd_hex};
 static t_algo_api g_sha256 = {"SHA256", 64, sha256_hex, sha256_fd_hex};
 
+// SI AJOUT ALGO
 const t_algo_api *algo_api(t_algo a)
 {
 	if (a == ALG_MD5)

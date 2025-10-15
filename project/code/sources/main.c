@@ -7,7 +7,7 @@ int main(int argc, char **argv)
 	t_task *tasks;
 
 	if (argc < 2)
-		die_err("usage: ft_ssl command [command opts] [command args]", EXIT_FAILURE);
+		die_err("usage: ft_ssl command [flags] [file/string]", EXIT_FAILURE);
 
 	tasks = NULL;
 	parse_cli(argc, argv, &algo, &flags, &tasks);

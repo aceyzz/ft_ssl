@@ -1,5 +1,7 @@
 #include "ft_ssl.h"
 
+// utils read file, stdin
+
 static int grow(uint8_t **buf, size_t cur, size_t need, size_t *cap)
 {
 	size_t ncap = *cap ? *cap : 8192;

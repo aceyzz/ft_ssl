@@ -1,5 +1,6 @@
 #include "ft_ssl.h"
 
+// SI AJOUT ALGO
 static int is_cmd(const char *s, t_algo *algo)
 {
 	if (ft_strcmp(s, "md5") == 0)
@@ -9,6 +10,9 @@ static int is_cmd(const char *s, t_algo *algo)
 	return (0);
 }
 
+// parse les flags courts d'une meme chaine (ex: -pqr)
+// ajoute les taches a la liste
+// gere les erreurs de flags et d'arguments
 static void parse_short_flags(const char *arg, int *i, int argc, char **argv, t_flags *f, t_task **tasks, uint8_t **stdin_cache, size_t *stdin_len)
 {
 	int k = 1;
@@ -52,6 +56,8 @@ static void parse_short_flags(const char *arg, int *i, int argc, char **argv, t_
 	}
 }
 
+// parse les arguments de la ligne de commande
+// construit la liste de taches a effectuer
 void parse_cli(int argc, char **argv, t_algo *algo, t_flags *flags, t_task **tasks)
 {
 	int i = 2;
@@ -59,8 +65,9 @@ void parse_cli(int argc, char **argv, t_algo *algo, t_flags *flags, t_task **tas
 	uint8_t *stdin_cache = NULL;
 	size_t stdin_len = 0;
 
+	// SI AJOUT ALGO
 	if (!is_cmd(argv[1], algo))
-		die_err("ft_ssl: Error: Unknown command.", EXIT_FAILURE);
+		die_err("ft_ssl: Error: Unknown command.\n\nCommands:\nmd5\nsha256\n\nFlags:\n-p -q -r -s", EXIT_FAILURE);
 	flags->p = 0;
 	flags->q = 0;
 	flags->r = 0;

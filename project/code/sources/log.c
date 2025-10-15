@@ -1,5 +1,7 @@
 #include "ft_ssl.h"
 
+// utils logger
+
 static void print_tag(int fd, char *color, char *tag)
 {
 	ft_putstr_fd(color, fd);

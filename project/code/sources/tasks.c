@@ -1,5 +1,6 @@
 #include "ft_ssl.h"
 
+// ajoute une tache a la fin de la liste
 void task_push_back(t_task **head, t_ikind kind, const char *label, const uint8_t *data, size_t len, int from_p)
 {
 	t_task *n;
@@ -41,6 +42,7 @@ void task_push_back(t_task **head, t_ikind kind, const char *label, const uint8_
 	it->next = n;
 }
 
+// libere toute la liste et son contenu
 void task_clear(t_task **head)
 {
 	t_task *it = *head;

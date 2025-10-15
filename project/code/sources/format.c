@@ -1,5 +1,7 @@
 #include "ft_ssl.h"
 
+// PRINTER UTILS
+
 static void print_line_named(char *name, char *label, char *hex)
 {
 	ft_putstr_fd(name, STDOUT_FILENO);
@@ -51,6 +53,7 @@ static void print_stdin_named(char *hex)
 	ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
+// SI AJOUT ALGO
 static void print_hash_line(t_algo algo, t_flags f, t_task *t, char *hex)
 {
 	char *name;
@@ -112,6 +115,7 @@ static void print_hash_line(t_algo algo, t_flags f, t_task *t, char *hex)
 	ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
+// orchestration du hash + print
 void hash_and_print(t_algo algo, t_flags flags, t_task *t)
 {
 	const t_algo_api *api = algo_api(algo);
