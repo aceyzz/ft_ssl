@@ -3,8 +3,8 @@
 // ajoute une tache a la fin de la liste
 void task_push_back(t_task **head, t_ikind kind, const char *label, const uint8_t *data, size_t len, int from_p)
 {
-	t_task *n;
-	t_task *it;
+	t_task	*n;
+	t_task	*it;
 
 	n = (t_task *)malloc(sizeof(t_task));
 	if (!n)
@@ -45,8 +45,8 @@ void task_push_back(t_task **head, t_ikind kind, const char *label, const uint8_
 // libere toute la liste et son contenu
 void task_clear(t_task **head)
 {
-	t_task *it = *head;
-	t_task *nx;
+	t_task	*it = *head;
+	t_task	*nx;
 
 	while (it)
 	{

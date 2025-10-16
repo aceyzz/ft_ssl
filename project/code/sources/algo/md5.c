@@ -1,4 +1,5 @@
 #include "ft_ssl.h"
+#include "md5.h"
 
 // merci https://fr.wikipedia.org/wiki/MD5#Pseudo-code
 
@@ -132,4 +133,25 @@ void md5_final(t_md5_ctx *ctx, uint8_t out[16])
 		out[i * 4 + 2] = (uint8_t)((s[i] >> 16) & 0xff);
 		out[i * 4 + 3] = (uint8_t)((s[i] >> 24) & 0xff);
 	}
+}
+
+char	*md5_hex(const uint8_t *data, size_t len)
+{
+	t_md5_ctx ctx; uint8_t digest[16];
+	md5_init(&ctx);
+	if (data && len) md5_update(&ctx, data, len);
+	md5_final(&ctx, digest);
+	return (bin_to_hex(digest, 16));
+}
+
+char	*md5_fd_hex(int fd)
+{
+	t_md5_ctx ctx; uint8_t digest[16];
+	uint8_t buf[4096]; ssize_t n;
+	md5_init(&ctx);
+	while ((n = read(fd, buf, sizeof(buf))) > 0)
+		md5_update(&ctx, buf, (size_t)n);
+	if (n < 0) return NULL;
+	md5_final(&ctx, digest);
+	return (bin_to_hex(digest, 16));
 }

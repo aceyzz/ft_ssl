@@ -1,4 +1,5 @@
 #include "ft_ssl.h"
+#include "sha256.h"
 
 // merci https://fr.wikipedia.org/wiki/SHA-2#SHA-256 
 // et https://stackoverflow.com/questions/11937192/sha-256-pseuedocode
@@ -123,4 +124,25 @@ void sha256_final(t_sha256_ctx *ctx, uint8_t out[32])
 		out[i * 4 + 2] = (uint8_t)((ctx->h[i] >> 8) & 0xff);
 		out[i * 4 + 3] = (uint8_t)(ctx->h[i] & 0xff);
 	}
+}
+
+char	*sha256_hex(const uint8_t *data, size_t len)
+{
+	t_sha256_ctx ctx; uint8_t digest[32];
+	sha256_init(&ctx);
+	if (data && len) sha256_update(&ctx, data, len);
+	sha256_final(&ctx, digest);
+	return (bin_to_hex(digest, 32));
+}
+
+char	*sha256_fd_hex(int fd)
+{
+	t_sha256_ctx ctx; uint8_t digest[32];
+	uint8_t buf[4096]; ssize_t n;
+	sha256_init(&ctx);
+	while ((n = read(fd, buf, sizeof(buf))) > 0)
+		sha256_update(&ctx, buf, (size_t)n);
+	if (n < 0) return NULL;
+	sha256_final(&ctx, digest);
+	return (bin_to_hex(digest, 32));
 }

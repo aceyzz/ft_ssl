@@ -2,7 +2,7 @@
 
 // utils read file, stdin
 
-static int grow(uint8_t **buf, size_t cur, size_t need, size_t *cap)
+static int	grow(uint8_t **buf, size_t cur, size_t need, size_t *cap)
 {
 	size_t ncap = *cap ? *cap : 8192;
 	while (cur + need > ncap)
@@ -21,12 +21,12 @@ static int grow(uint8_t **buf, size_t cur, size_t need, size_t *cap)
 	return (0);
 }
 
-int io_read_fd(int fd, uint8_t **out, size_t *len)
+int	io_read_fd(int fd, uint8_t **out, size_t *len)
 {
-	uint8_t *dst = NULL;
-	size_t cap = 0, w = 0;
-	uint8_t buf[4096];
-	ssize_t n;
+	uint8_t	*dst = NULL;
+	size_t	cap = 0, w = 0;
+	uint8_t	buf[4096];
+	ssize_t	n;
 
 	*out = NULL;
 	*len = 0;
@@ -52,12 +52,12 @@ int io_read_fd(int fd, uint8_t **out, size_t *len)
 	return (0);
 }
 
-int io_read_file(const char *path, uint8_t **out, size_t *len)
+int	io_read_file(const char *path, uint8_t **out, size_t *len)
 {
-	int fd = open(path, O_RDONLY);
+	int	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		return (-1);
-	int r = io_read_fd(fd, out, len);
+	int	r = io_read_fd(fd, out, len);
 	close(fd);
 	return (r);
 }

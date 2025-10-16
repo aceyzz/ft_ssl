@@ -1,20 +1,20 @@
 #include "ft_ssl.h"
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_algo algo;
-	t_flags flags;
-	t_task *tasks;
+	const t_algo_api	*api;
+	t_flags				flags;
+	t_task				*tasks;
 
 	if (argc < 2)
-		die_err("usage: ft_ssl command [flags] [file/string]", EXIT_FAILURE);
+		algo_print_usage_and_die();
 
 	tasks = NULL;
-	parse_cli(argc, argv, &algo, &flags, &tasks);
-	if (run_tasks(algo, flags, tasks) != 0)
+	parse_cli(argc, argv, &api, &flags, &tasks);
+	if (run_tasks(api, flags, tasks) != 0)
 	{
 		task_clear(&tasks);
-		exit(EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	}
 	task_clear(&tasks);
 	return (0);

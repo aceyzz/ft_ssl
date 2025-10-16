@@ -1,86 +1,31 @@
 #include "ft_ssl.h"
 
-static char *bin_to_hex(const uint8_t *buf, size_t n)
-{
-	static const char *h = "0123456789abcdef";
-	char *out = (char *)malloc(n * 2 + 1);
-	size_t i;
+// pointeur sur fonction (plus de if/else) : seule ligne a modifier pour ajouter un algo
+static const t_algo_api g_algos[] = {
+	{ "md5",    "MD5",    32, md5_hex,    md5_fd_hex    },
+	{ "sha256", "SHA2-256", 64, sha256_hex, sha256_fd_hex },
+	{ "sha512", "SHA2-512", 128, sha512_hex, sha512_fd_hex },
+};
+static const size_t g_algos_count = sizeof(g_algos) / sizeof(g_algos[0]);
 
-	if (!out)
-		return (NULL);
-	for (i = 0; i < n; i++)
+// dispatcher (parcourt tab de pointeurs sur fonctions, plus de if/else)
+const t_algo_api	*algo_by_cmd(const char *cmd)
+{
+	for (size_t i = 0; i < g_algos_count; ++i)
+		if (ft_strcmp(g_algos[i].cmd, cmd) == 0)
+			return (&g_algos[i]);
+	return (NULL);
+}
+
+void	algo_print_usage_and_die(void)
+{
+	ft_putstr_fd("usage: ft_ssl command [flags] [file/string]\n\n", STDERR_FILENO);
+	ft_putstr_fd("Commands:\n", STDERR_FILENO);
+	for (size_t i = 0; i < g_algos_count; ++i)
 	{
-		out[i * 2] = h[(buf[i] >> 4) & 0xF];
-		out[i * 2 + 1] = h[buf[i] & 0xF];
+		ft_putstr_fd(g_algos[i].cmd, STDERR_FILENO);
+		ft_putchar_fd('\n', STDERR_FILENO);
 	}
-	out[n * 2] = '\0';
-	return (out);
-}
-
-char *md5_hex(const uint8_t *data, size_t len)
-{
-	t_md5_ctx ctx;
-	uint8_t digest[16];
-
-	md5_init(&ctx);
-	if (data && len)
-		md5_update(&ctx, data, len);
-	md5_final(&ctx, digest);
-	return (bin_to_hex(digest, 16));
-}
-
-char *sha256_hex(const uint8_t *data, size_t len)
-{
-	t_sha256_ctx ctx;
-	uint8_t digest[32];
-	sha256_init(&ctx);
-	if (data && len)
-		sha256_update(&ctx, data, len);
-	sha256_final(&ctx, digest);
-	return (bin_to_hex(digest, 32));
-}
-
-char *md5_fd_hex(int fd)
-{
-	t_md5_ctx ctx;
-	uint8_t digest[16];
-	uint8_t buf[4096];
-	ssize_t n;
-
-	md5_init(&ctx);
-	while ((n = read(fd, buf, sizeof(buf))) > 0)
-		md5_update(&ctx, buf, (size_t)n);
-	if (n < 0)
-		return (NULL);
-	md5_final(&ctx, digest);
-	return (bin_to_hex(digest, 16));
-}
-
-char *sha256_fd_hex(int fd)
-{
-	t_sha256_ctx ctx;
-	uint8_t digest[32];
-	uint8_t buf[4096];
-	ssize_t n;
-
-	sha256_init(&ctx);
-	while ((n = read(fd, buf, sizeof(buf))) > 0)
-		sha256_update(&ctx, buf, (size_t)n);
-	if (n < 0)
-		return (NULL);
-	sha256_final(&ctx, digest);
-	return (bin_to_hex(digest, 32));
-}
-
-// SI AJOUT ALGO
-// instances statiques de t_algo_api pour chaque algo vers pointeurs de fonctions
-static t_algo_api g_md5 = {"MD5", 32, md5_hex, md5_fd_hex};
-static t_algo_api g_sha256 = {"SHA256", 64, sha256_hex, sha256_fd_hex};
-
-// SI AJOUT ALGO
-const t_algo_api *algo_api(t_algo a)
-{
-	if (a == ALG_MD5)
-		return (&g_md5);
-	return (&g_sha256);
+	ft_putstr_fd("\nFlags:\n-p -q -r -s\n", STDERR_FILENO);
+	exit(EXIT_FAILURE);
 }
